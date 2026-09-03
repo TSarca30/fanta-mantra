@@ -22,7 +22,7 @@ export async function getPurchases() {
   try {
     const response = await client.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: "Asta!A:F" });
     const rows = response.data.values || [];
-    return rows.slice(1).filter(row => row[0]).map(([playerId, name, role, team, buyer, credits]) => ({ playerId, name, role, team, buyer, credits: Number(credits || 0) }));
+    return rows.slice(1).filter(row => row[0]).map(([playerId, name, role, team, buyer, credits], index) => ({ playerId, name, role, team, buyer, credits: Number(credits || 0), row: index + 2 }));
   } catch (error) {
     if (error.code === 400 || error.code === 404) return [];
     throw error;
@@ -40,12 +40,19 @@ export async function recordPurchase(purchase) {
     await client.spreadsheets.values.update({ spreadsheetId: SHEET_ID, range: "Asta!A1:F1", valueInputOption: "RAW", requestBody: { values: headers } });
   }
   const existing = await getPurchases();
-  const index = existing.findIndex(item => item.playerId === purchase.playerId);
+  const index = existing.findIndex(item => item.playerId === purchase.playerId || (item.name === purchase.name && item.team === purchase.team));
   const values = [[purchase.playerId, purchase.name, purchase.role, purchase.team, purchase.buyer, purchase.credits]];
   if (index >= 0) {
-    await client.spreadsheets.values.update({ spreadsheetId: SHEET_ID, range: `Asta!A${index + 2}:F${index + 2}`, valueInputOption: "RAW", requestBody: { values } });
+    await client.spreadsheets.values.update({ spreadsheetId: SHEET_ID, range: `Asta!A${existing[index].row}:F${existing[index].row}`, valueInputOption: "RAW", requestBody: { values } });
   } else {
     await client.spreadsheets.values.append({ spreadsheetId: SHEET_ID, range: "Asta!A:F", valueInputOption: "RAW", requestBody: { values } });
   }
+}
+
+export async function removePurchase(playerId) {
+  const purchase = (await getPurchases()).find(item => item.playerId === playerId);
+  if (!purchase) return false;
+  await sheets().spreadsheets.values.clear({ spreadsheetId: SHEET_ID, range: `Asta!A${purchase.row}:F${purchase.row}` });
+  return true;
 }
 
