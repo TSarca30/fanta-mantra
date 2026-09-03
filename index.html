@@ -12,12 +12,10 @@
 <body>
   <header><div class="brand">⚽ <span>MANTRA</span> ASTA</div><div class="status"><i></i> Asta live</div></header>
   <main>
-    <section class="hero">
-      <div><p class="eyebrow">FANTACALCIO MANTRA 2026/27</p><h1>La tua asta, <em>sotto controllo.</em></h1><p class="sub">Cerca, confronta e assegna i giocatori in pochi secondi.</p></div>
-      <div class="search-box"><label for="search">Chi è stato chiamato?</label><input id="search" autocomplete="off" placeholder="Cerca giocatore o squadra..." /><div id="search-result"></div></div>
-    </section>
+    <section class="search-box"><div><p class="eyebrow">RICERCA GIOCATORE</p><label for="search">Chi è stato chiamato?</label></div><input id="search" autocomplete="off" placeholder="Cerca giocatore o squadra..." /><div id="search-result"></div></section>
     <section class="teams"><div class="section-title"><h2>Rose e crediti</h2><span>Budget iniziale: 500</span></div><div id="teams" class="team-grid"></div></section>
-    <section class="market"><div class="market-head"><div><p class="eyebrow">LISTA DISPONIBILI</p><h2>Giocatori</h2></div><div class="controls"><select id="role"><option value="">Tutti i ruoli</option></select><select id="sort"><option value="Prezzo-desc">Prezzo: alto → basso</option><option value="Prezzo-asc">Prezzo: basso → alto</option><option value="PMA-desc">PMA: alto → basso</option><option value="Quo-desc">Quotazione: alta → bassa</option><option value="Nome-asc">Nome: A → Z</option></select><label class="toggle"><input type="checkbox" id="sold" /> Mostra acquistati</label></div></div><div id="players" class="player-list"></div></section>
+    <section class="market"><div class="market-head"><div><p class="eyebrow">LISTA DISPONIBILI</p><h2>Giocatori</h2></div><div class="controls"><select id="sort"></select></div></div><div id="role-buttons" class="role-buttons"></div><div id="players" class="player-list"></div></section>
+    <section class="market unavailable"><div class="market-head"><div><p class="eyebrow">LISTA INDISPONIBILI</p><h2>Giocatori acquistati</h2></div><span id="unavailable-count" class="muted"></span></div><div id="unavailable" class="player-list"></div></section>
   </main>
   <dialog id="assign-dialog"><form method="dialog" id="assign-form"><button class="close" value="cancel" aria-label="Chiudi">×</button><p class="eyebrow">ASSEGNA GIOCATORE</p><h2 id="modal-name"></h2><p id="modal-info" class="muted"></p><label>Acquirente<select id="buyer"></select></label><label>Crediti pagati<input id="credits" type="number" min="0" required /></label><div class="dialog-actions"><button value="cancel" class="secondary">Annulla</button><button id="confirm" value="default">Conferma acquisto</button></div></form></dialog>
   <template id="player-template"><article class="player"><div class="role"></div><div class="player-main"><strong class="name"></strong><span class="club"></span></div><div class="badges"></div><div class="metrics"></div><button class="assign">Assegna</button></article></template>
