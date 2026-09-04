@@ -41,7 +41,8 @@ function playerTags(player){
 }
 
 function card(player,off=false,position=null){
-  const fragment=$("#player-template").content.cloneNode(true),assignButton=fragment.querySelector(".assign");\n  if(position!==null)fragment.querySelector(".rank").textContent=position;
+  const fragment=$("#player-template").content.cloneNode(true),assignButton=fragment.querySelector(".assign");
+  if(position!==null)fragment.querySelector(".rank").textContent=position;
   fragment.querySelector(".reactions").innerHTML=reactionButtons(player);
   fragment.querySelectorAll("[data-reaction]").forEach(button=>button.onclick=()=>toggleReaction(player,button.dataset.reaction));
   fragment.querySelector(".name").textContent=player.Nome;
