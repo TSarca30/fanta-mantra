@@ -40,8 +40,8 @@ function playerTags(player){
   return `<span class="tag fascia">${player.Fascia||"Senza fascia"}</span><span class="tag role-tag">${player.Ruolo||"—"}</span><span class="tag team-tag">${player.Team||"—"}</span>`;
 }
 
-function card(player,off=false){
-  const fragment=$("#player-template").content.cloneNode(true),assignButton=fragment.querySelector(".assign");
+function card(player,off=false,position=null){
+  const fragment=$("#player-template").content.cloneNode(true),assignButton=fragment.querySelector(".assign");\n  if(position!==null)fragment.querySelector(".rank").textContent=position;
   fragment.querySelector(".reactions").innerHTML=reactionButtons(player);
   fragment.querySelectorAll("[data-reaction]").forEach(button=>button.onclick=()=>toggleReaction(player,button.dataset.reaction));
   fragment.querySelector(".name").textContent=player.Nome;
@@ -61,7 +61,7 @@ function list(){
   const query=$("#search").value.toLowerCase(),[key,direction]=$("#sort").value.split("|"),filter=$("#reaction-filter").value;
   let visible=players.filter(player=>!purchase(player)&&(!role||player.roles?.includes(role)||player.Ruolo.includes(role))&&(!filter||isMarked(player,filter))&&(`${player.Nome} ${player.Team}`.toLowerCase().includes(query)));
   visible.sort((a,b)=>direction==="asc"?num(a[key])-num(b[key]):num(b[key])-num(a[key]));
-  const fragment=document.createDocumentFragment();visible.forEach(player=>fragment.append(card(player)));
+  const fragment=document.createDocumentFragment();visible.forEach((player,index)=>fragment.append(card(player,false,index+1)));
   $("#players").replaceChildren(fragment);$("#available-count").textContent=`${visible.length} disponibili`;
 }
 
